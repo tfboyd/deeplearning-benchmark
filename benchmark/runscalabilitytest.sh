@@ -162,7 +162,7 @@ mxnet_model_string=`echo $mxnet_model_string | sed "s/resnet:[0-9]*/&:224/g"`
 mxnet_model_string=`echo $mxnet_model_string | sed "s/,/' '/g"`
 mxnet_model_string="'"${mxnet_model_string}"'"
 
-echo "skipping actuall running of MXNet"
+echo "Skipping actual running of MXNet"
 # Construct the command to run MXNet tests
 #image_recog_dir="${REMOTE_DIR}/mxnet/example/image-classification/"
 #mxnet_command="cd $image_recog_dir && python benchmark.py --worker_file ${REMOTE_DIR}/hostnames --worker_count ${HOSTS_COUNT} --gpu_count ${GPU_PER_HOST} --networks ${mxnet_model_string}"
