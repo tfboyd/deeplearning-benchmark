@@ -172,9 +172,9 @@ done
 #arr=( $line )
 #master_host=${arr[1]}
 #ssh -o "StrictHostKeyChecking no" $master_host $mxnet_command
-#rm -rf csv_mxnet
-#mkdir csv_mxnet
-#scp -o "StrictHostKeyChecking no" ${master_host}:${REMOTE_DIR}/mxnet/example/image-classification/benchmark/*.csv ./csv_mxnet
+rm -rf csv_mxnet
+mkdir csv_mxnet
+scp -o "StrictHostKeyChecking no" ${master_host}:${REMOTE_DIR}/mxnet/example/image-classification/benchmark/*.csv ./csv_mxnet
 
 # Run TensorFlow
 echo "Start TensorFlow test"
