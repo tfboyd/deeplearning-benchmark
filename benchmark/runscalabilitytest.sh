@@ -190,10 +190,10 @@ cp logs/*.csv $current_dir/csv_tf
 cd $current_dir
 
 # Remove the header from MXNet CSV files
-for file in ./csv_mxnet/*.csv; do
-    sed '1d' ${file} > ${file}.bak; mv ${file}.bak ${file}
-    echo $file
-done
+#for file in ./csv_mxnet/*.csv; do
+#    sed '1d' ${file} > ${file}.bak; mv ${file}.bak ${file}
+#    echo $file
+#done
 
 
 #Plot graph
