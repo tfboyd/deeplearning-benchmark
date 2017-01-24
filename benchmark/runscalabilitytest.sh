@@ -175,7 +175,7 @@ echo "Skipping actual running of MXNet"
 #ssh -o "StrictHostKeyChecking no" $master_host $mxnet_command
 rm -rf csv_mxnet
 mkdir csv_mxnet
-scp -o "StrictHostKeyChecking no" ${master_host}:${REMOTE_DIR}/mxnet/example/image-classification/benchmark/*.csv ./csv_mxnet
+#scp -o "StrictHostKeyChecking no" ${master_host}:${REMOTE_DIR}/mxnet/example/image-classification/benchmark/*.csv ./csv_mxnet
 
 # Run TensorFlow
 echo "Start TensorFlow test"
@@ -190,10 +190,10 @@ cp logs/*.csv $current_dir/csv_tf
 cd $current_dir
 
 # Remove the header from MXNet CSV files
-for file in ./csv_mxnet/*.csv; do
-    sed '1d' ${file} > ${file}.bak; mv ${file}.bak ${file}
-    echo $file
-done
+#for file in ./csv_mxnet/*.csv; do
+#    sed '1d' ${file} > ${file}.bak; mv ${file}.bak ${file}
+#    echo $file
+#done
 
 
 #Plot graph
