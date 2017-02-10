@@ -15,8 +15,8 @@
     "InstanceType" : {
       "Description" : "The EC2 instance type for all instances.",
       "Type" : "String",
-      "Default" : "g2.2xlarge",
-      "AllowedValues" : [ "g2.2xlarge", "g2.8xlarge", "p2.xlarge", "p2.8xlarge", "p2.16xlarge" ],
+      "Default" : "p2.xlarge",
+      "AllowedValues" : [ "p2.xlarge", "p2.8xlarge", "p2.16xlarge" ],
       "ConstraintDescription" : "Must be a valid GPU EC2 instance type."
     },
     "SSHLocation": {
@@ -24,13 +24,28 @@
       "Type": "String",
       "MinLength": "9",
       "MaxLength": "18",
+      "Default" : "0.0.0.0/0",
       "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
       "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x"
+    },
+    "WorkerAMI": {
+      "Description": "AMI for the workers, which are also likely PS servers as well",
+      "Default" : "ami-8dd357ed",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18"
+    },
+    "TFInstallVer": {
+      "Description": "Version of TF to install via pip from S3 tf_binary folder",
+      "Type": "String",
+      "Default" : "tensorflow-1.0.0rc2-cp27-cp27mu-linux_x86_64.whl",
+      "MinLength": "9",
+      "MaxLength": "100"
     }
   },
   "Mappings" : {
     "AmazonLinux" : {
-      "us-west-2"      : { "AMI" : "ami-ac78c6cc"  }
+      "us-west-2"      : { "AMI" : "ami-8dd357ed",  }
     }, 
     "SubnetConfig" : {
       "VPC"     : { "CIDR" : "10.0.0.0/16" },
@@ -190,7 +205,7 @@
       "Type" : "AWS::AutoScaling::LaunchConfiguration",
       "Properties" : {
         "ImageId" : {
-          "Fn::FindInMap" : [ "AmazonLinux", { "Ref" : "AWS::Region" }, "AMI" ]
+          "Ref" : "WorkerAMI"
         },
         "InstanceType" : {
           "Ref" : "InstanceType"
@@ -226,7 +241,7 @@
       "Properties" : {
         "AssociatePublicIpAddress" : "true",
         "ImageId" : {
-          "Fn::FindInMap" : [ "AmazonLinux", { "Ref" : "AWS::Region" }, "AMI" ]
+          "Ref" : "WorkerAMI"
         },
         "InstanceType" : {
           "Ref" : "InstanceType"
@@ -251,6 +266,18 @@
                 "\n",
 
                 "mkdir -p /opt/deeplearning",
+                "\n",
+
+                "# Install latest TF",
+                "\n",
+                "rm -rf /tmp/tf_install",
+                "\n",
+                "mkdir -p /tmp/tf_install/",
+                "\n",
+                "wget --no-verbose -P /tmp/tf_install/",
+                " https://s3-us-west-2.amazonaws.com/tf-benchmark/tf_binary/", { "Ref" : "TFInstallVer" }, 
+                "\n",  
+                "pip install --upgrade --force-reinstall /tmp/tf_install/", { "Ref" : "TFInstallVer" },
                 "\n",
 
                 "# run cfn-init. \n",
